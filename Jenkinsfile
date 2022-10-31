@@ -52,15 +52,17 @@ pipeline{
     stage("deploy"){
       input{
         message "Select the environment to deploy to"
-        ok "Env Selected"
+        ok "Done"
         parameters{
-          choice(name: 'ENV', choices:['dev','stage','prd'], description:'')
+          choice(name: 'ONE', choices:['dev','stage','prd'], description:'')
+          choice(name: 'TWO', choices:['dev','stage','prd'], description:'')
         }
       }
       steps{
         script{
           gv.deployApp()
-          echo "Deploying to ${ENV}"
+          echo "Deploying to ${ONE}"
+          echo "Deploying to ${TWO}"
         }
         // withCredentials([
         //   usernamePassword(credentials:'demo-server-cred',usernameVariable: USER, passwordVariable:PWD)
