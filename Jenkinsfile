@@ -60,7 +60,7 @@ pipeline{
       steps{
         script{
           gv.deployApp()
-          echo "Deploying to {$ENV}"
+          echo "Deploying to ${ENV}"
         }
         // withCredentials([
         //   usernamePassword(credentials:'demo-server-cred',usernameVariable: USER, passwordVariable:PWD)
