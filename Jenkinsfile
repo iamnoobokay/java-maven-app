@@ -49,15 +49,15 @@ pipeline{
       }
     }
   }
-  post{
-    always{
-      echo 'email sent'
-    }
-    success{
+//   post{
+//     always{
+//       echo 'email sent'
+//     }
+//     success{
       
-    }
-    failure{
+//     }
+//     failure{
       
-    }
-  }
+//     }
+//   }
 }
