@@ -1,86 +1,35 @@
-def gv
 pipeline{
-  
-  agent any
-  parameters{
-    // string(name: 'VERSION', defaultValue: '', description: 'version to deploy on prod')
-    choice(name: 'VERSION', choices:['1.1.0','1.2.0','1.3.0'], description:'')
-    booleanParam(name:'executeTests',defaultValue: true, description: '')
-  }
-  // tools{
-  //   maven : "maven-3.8.6"
-  // }
-  environment{
-    NEW_VERSION = '1.3.0'
-    SERVER_CREDENTIALS = credentials('demo-server-cred')
-  }
-  stages {
-    stage("init"){
-      steps{ 
-        script{
-          gv = load "script.groovy"
-        }
-      }
+    agent any
+    tools{
+        maven: 'maven-3.8.6'
     }
-
-    stage("build"){
-      steps{ 
-        script{
-          gv.buildApp();
+    stages{
+        stage('build jar'){
+            steps{
+                script{
+                    echo "building app"
+                    sh 'mvn package'
+                }
+            }
         }
-      }
+        stage('build image'){
+            steps{
+                script{
+                    echo "building docker image"
+                    withCredentials([usernamePassword(credentialsId:'dockerhub-login',passwordVariable: 'PASS',usernameVariable:'USER')]){
+                        sh 'docker build -t pranavpo/my-repo:2.0 .'
+                        sh "echo $PASS docker login -u $USER --password-stdin"
+                        sh 'docker push pranavpo/my-repo:2.0'
+                    }
+                }
+            }
+        }
+        stage('deploy'){
+            steps{
+                script{
+                    echo "deploying app"
+                }
+            }
+        }
     }
-    
-    stage("test"){
-      // when{
-      //   expression{
-      //     env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master'
-      //   }
-      // }
-      when{
-        expression{
-          params.executeTests == true
-        }
-      }
-      steps{
-        script{
-          gv.testApp()
-        }
-      }
-    }
-    
-    stage("deploy"){
-      input{
-        message "Select the environment to deploy to"
-        ok "Done"
-        parameters{
-          choice(name: 'ONE', choices:['dev','stage','prd'], description:'')
-          choice(name: 'TWO', choices:['dev','stage','prd'], description:'')
-        }
-      }
-      steps{
-        script{
-          gv.deployApp()
-          echo "Deploying to ${ONE}"
-          echo "Deploying to ${TWO}"
-        }
-        // withCredentials([
-        //   usernamePassword(credentials:'demo-server-cred',usernameVariable: USER, passwordVariable:PWD)
-        // ]){
-        //   echo "${USER} ${PWD}"   
-        // }
-      }
-    }
-  }
-//   post{
-//     always{
-//       echo 'email sent'
-//     }
-//     success{
-      
-//     }
-//     failure{
-      
-//     }
-//   }
 }
