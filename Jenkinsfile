@@ -24,7 +24,7 @@ pipeline{
             steps{
                 script{
                     // gv.buildJar();
-                    bulidJar()
+                    buildJar()
                 }
             }
         }
@@ -37,7 +37,7 @@ pipeline{
             steps{
                 script{
                     // gv.buildImage();
-                     bulidImage()
+                     buildImage 'pranavpo/my-repo:3.0'
                 }
             }
         }
