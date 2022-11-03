@@ -12,7 +12,7 @@
 //     }
 // }
 
-def deploy(){
+def deployApp(){
     echo "deploying app"
 }
 
