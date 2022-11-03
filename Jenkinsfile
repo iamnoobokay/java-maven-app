@@ -1,9 +1,20 @@
+#!/usr/bin/env groovy
+def gv
+@Library('jenkins-shared-library')_
+
 pipeline{
     agent any
     tools {
         maven 'maven-3.8.6'
     }
     stages {
+        stage('init'){
+            steps{
+                script{
+                    gv = 'code.groovy'
+                }
+            }
+        }
         stage('build jar'){
             when{
                 expression{
@@ -12,8 +23,8 @@ pipeline{
             }
             steps{
                 script{
-                    echo "building app"
-                    sh 'mvn package'
+                    // gv.buildJar();
+                    bulidJar()
                 }
             }
         }
@@ -25,12 +36,8 @@ pipeline{
             }
             steps{
                 script{
-                    echo "building docker image"
-                    withCredentials([usernamePassword(credentialsId:'dockerhub-login',passwordVariable: 'PASS',usernameVariable:'USER')]){
-                        sh 'docker build -t pranavpo/my-repo:2.0 .'
-                        sh "echo $PASS docker login -u $USER --password-stdin"
-                        sh 'docker push pranavpo/my-repo:2.0'
-                    }
+                    // gv.buildImage();
+                     bulidImage()
                 }
             }
         }
@@ -42,7 +49,7 @@ pipeline{
             }
             steps{
                 script{
-                    echo "deploying app"
+                    gv.deploy();
                 }
             }
         }
