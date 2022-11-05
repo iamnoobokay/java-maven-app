@@ -5,11 +5,11 @@ pipeline{
     }
     stages {
         stage('build jar'){
-            when{
-                expression{
-                    BRANCH_NAME == 'master'
-                }
-            }
+//             when{
+//                 expression{
+//                     BRANCH_NAME == 'master'
+//                 }
+//             }
             steps{
                 script{
                     echo "building app"
@@ -18,11 +18,11 @@ pipeline{
             }
         }
         stage('build image'){
-            when{
-                expression{
-                    BRANCH_NAME == 'master'
-                }
-            }
+//             when{
+//                 expression{
+//                     BRANCH_NAME == 'master'
+//                 }
+//             }
             steps{
                 script{
                     echo "building docker image"
@@ -35,11 +35,11 @@ pipeline{
             }
         }
         stage('deploy'){
-            when{
-                expression{
-                    BRANCH_NAME == 'master'
-                }
-            }
+//             when{
+//                 expression{
+//                     BRANCH_NAME == 'master'
+//                 }
+//             }
             steps{
                 script{
                     echo "deploying app"
