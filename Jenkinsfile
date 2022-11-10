@@ -85,5 +85,28 @@ pipeline{
                 }
             }
         }
+        stage('commit version update'){
+            when{
+                expression{
+                    BRANCH_NAME == 'master'
+                }
+            }
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsId:'askdjh',passwordVariable: 'PASS',usernameVariable:'USER')]){
+                        // need to set email and user first. just once
+                        sh 'git config user.email "jenkins@example.com"'
+                        sh 'git config user.name "jenkins"'
+                        sh 'git status'
+                        sh 'git branch'
+                        sh 'git config --list'
+                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/iamnoobokay/java-maven-app.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci:version bump"'
+                        sh 'git push origin HEAD:master'
+                    }
+                }
+            }
+        }
     }
 }
