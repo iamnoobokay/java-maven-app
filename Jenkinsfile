@@ -96,7 +96,7 @@ pipeline{
                     withCredentials([usernamePassword(credentialsId:'askdjh',passwordVariable: 'PASS',usernameVariable:'USER')]){
                         // need to set email and user first. just once and not again
                         // sh 'git config user.email "jenkins@example.com"'
-                        // sh 'git config user.name "jenkins"'
+                        // sh 'git config user.name "jenkins"' asd
                         sh 'git status'
                         sh 'git branch'
                         sh 'git config --list'
